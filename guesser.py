@@ -17,6 +17,7 @@ def check_existed(subdomain, nameserver=[], timeout=5, ):
     result = {}
     result['state'] = False
     result['IP'] = ''
+    result['target'] = subdomain
     
     checker = resolver.Resolver()
     if isinstance(nameserver, (list, tuple)):
@@ -40,7 +41,7 @@ def check_existed(subdomain, nameserver=[], timeout=5, ):
     try:
         answer = checker.query(subdomain)
         result['state'] = True
-    except Timeout:
+    except:
         result['state'] = False
     #pprint(result)
     if result['state']:
