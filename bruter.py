@@ -24,15 +24,21 @@ class Bruter(object):
     """"""
 
     #----------------------------------------------------------------------
-    def __init__(self, target, dict_file, thread_max):
+    def __init__(self, target, dict_file, thread_max, 
+                 timeout=5, nameservers=[]):
         """Constructor"""
         assert isinstance(target, (str, unicode))
         self.target = target
         
+        self._timeout = timeout
+        self._nameservers = nameservers
+        
         self._absolutely_no_such_domain_ = 'a-b-s-o-l-u-t-e-l-y-n-o'
         self.first_error_domain = '.'.join([self._absolutely_no_such_domain_, self.target])
 
-        self.error_ip_or_empty = check_existed(subdomain=self.first_error_domain)['IP']
+        self.error_ip_or_empty = check_existed(subdomain=self.first_error_domain,
+                                               nameserver=self._nameservers,
+                                               timeout=timeout)['IP']
         self._dict_parser = DictParser(dict_file)
         
         self._thread_max = thread_max
